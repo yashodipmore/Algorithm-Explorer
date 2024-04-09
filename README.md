@@ -1,7 +1,7 @@
 # Sorting Visualizer
 
 ## Overview
-Sorting Visualizer is a web application that allows users to visualize various sorting algorithms in action. It provides a hands-on experience for understanding how algorithms like Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quicksort, and Heapsort work.
+Algorithm Explorer is a web application that allows users to visualize various sorting algorithms in action. It provides a hands-on experience for understanding how algorithms like Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quicksort, and Heapsort work.
 
 ## Features
 - Interactive visualization of sorting algorithms.
