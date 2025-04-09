@@ -9,7 +9,7 @@
 DSA Visualizer is a clean, responsive, and educational visualization tool for algorithms like Bubble Sort, Merge Sort, Insertion Sort, Linear Search, and placeholders for BFS/DFS Grid.  
 It is built with pure HTML, CSS (TailwindCSS), and **p5.js**, a JavaScript library that makes creative coding easy and visual.
 
-This project is not just a technical demo — it is a **reflection of deep creative interest in p5.js**, built by a developer who dreams to **contribute to Processing Foundation** and push the power of visual code learning.
+This project is not just a technical demo  it is a **reflection of deep creative interest in p5.js**, built by a developer who dreams to **contribute to Processing Foundation** and push the power of visual code learning.
 
 ---
 
