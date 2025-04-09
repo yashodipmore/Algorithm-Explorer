@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AlgoScope - DSA Visualizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.min.js"></script>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2540/2540617.png" />
+</head>
+
+<body class="bg-black text-white font-mono flex flex-col items-center min-h-screen transition duration-300 ease-in-out">
+
+  <!-- Header -->
+  <header class="mt-10 text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-green-400 tracking-tight animate-slidein inline-block border-b-4 border-transparent hover:border-green-400 transition-all duration-300">
+        AlgoScope - DSA Visualizer
+    </h1>
+    <p class="text-gray-400 text-sm md:text-base mt-2 animate-fadein tracking-wide max-w-xl mx-auto">
+      A modern tool to visualize <span class="text-green-300 font-semibold">Sorting</span>,
+      <span class="text-green-300 font-semibold">Searching</span>, and
+      <span class="text-green-300 font-semibold">Pathfinding</span> algorithms step-by-step.
+    </p>
+
+    <style>
+        @keyframes slidein {
+          0% { transform: translateY(-20px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+      
+        @keyframes fadein {
+          0% { opacity: 0; transform: translateY(10px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+      
+        .animate-slidein {
+          animation: slidein 1s ease-out forwards;
+        }
+      
+        .animate-fadein {
+          animation: fadein 1.5s ease-out forwards;
+        }
+      </style>
+      
+  </header>
+  
+
+ <!-- Improved Controls Section -->
+<section id="controls" class="mt-6 w-full flex flex-wrap justify-center items-center gap-4 px-4 max-w-5xl">
+
+    <select id="algoSelect" class="bg-gray-900 border border-gray-700 text-white text-sm rounded px-4 py-2 w-48 focus:ring-2 ring-green-500">
+      <option>Bubble Sort</option>
+      <option>Selection Sort</option>
+      <option>Insertion Sort</option>
+      <option>Merge Sort</option>
+      <option>Linear Search</option>
+      <option>BFS Grid</option>
+      <option>DFS Grid</option>
+    </select>
+  
+    <div class="flex flex-col items-center text-white">
+      <input id="speedSlider" type="range" min="10" max="200" value="50" class="accent-green-400 w-40 cursor-pointer mb-1" title="Speed" />
+      <span class="text-sm" id="speedValue">Speed: 50</span>
+    </div>
+  
+    <input id="customInput" type="text" placeholder="Custom array (e.g. 5,3,8,1)" class="bg-gray-900 text-white px-4 py-2 rounded border border-gray-700 w-64 text-sm"/>
+  
+    <input id="searchValue" type="number" placeholder="Search value" class="bg-gray-900 text-white px-4 py-2 rounded border border-gray-700 w-36 text-sm"/>
+  
+    <button id="startBtn" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-4 py-2 rounded transition duration-200">▶️ Start</button>
+    <button id="resetBtn" class="bg-red-500 hover:bg-red-400 text-black font-semibold px-4 py-2 rounded transition duration-200">🔁 Reset</button>
+    <button id="pauseBtn" class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded transition duration-200">⏸ Pause</button>
+    <button id="themeToggle" class="bg-blue-500 hover:bg-blue-400 text-black font-semibold px-4 py-2 rounded transition duration-200">🌓 Toggle Theme</button>
+  
+ 
+  
+  <!-- Add this script at the bottom of your HTML -->
+  <script>
+    // Speed value display
+    const speedSlider = document.getElementById('speedSlider');
+    const speedValue = document.getElementById('speedValue');
+    speedSlider.addEventListener('input', () => {
+      speedValue.textContent = `Speed: ${speedSlider.value}`;
+    });
+  
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+    });
+  
+    // Pause Toggle (can be connected to your algo logic)
+    const pauseBtn = document.getElementById('pauseBtn');
+    let isPaused = false;
+    pauseBtn.addEventListener('click', () => {
+      isPaused = !isPaused;
+      pauseBtn.textContent = isPaused ? '▶️ Resume' : '⏸ Pause';
+      // Add your pause/resume logic here
+    });
+  
+    // Start and Reset Button Handlers (basic structure)
+    document.getElementById('startBtn').addEventListener('click', () => {
+      console.log('Algorithm Started');
+      // Trigger your visualization
+    });
+  
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      console.log('Reset Triggered');
+      // Reset visualization
+    });
+  </script>
+  
+  <!-- Optional: Light Theme Styling -->
+  <style>
+    .light-theme {
+      background-color: #f9f9f9;
+      color: #111;
+    }
+  
+    .light-theme #controls select,
+    .light-theme #controls input,
+    .light-theme #controls button {
+      background-color: #e4e4e4;
+      color: #111;
+      border-color: #ccc;
+    }
+  
+    .light-theme button:hover {
+      filter: brightness(1.05);
+    }
+  </style>
+   </section>
+
+  <!-- Canvas Holder -->
+  <section class="mt-8 w-full px-4 max-w-6xl">
+    <div id="sketch-holder" class="w-full border border-gray-800 rounded-lg overflow-hidden"></div>
+  </section>
+
+  <!-- Info Panel -->
+  <section class="mt-4 max-w-xl text-center">
+    <div class="bg-gray-900 text-green-400 text-xs px-4 py-2 rounded-lg shadow-md">
+      <p><strong>Algorithm:</strong> <span id="infoAlgo">Bubble Sort</span> | 
+         <strong>Steps:</strong> <span id="infoSteps">0</span> | 
+         <strong>Status:</strong> <span id="infoStatus">Waiting</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-8 mb-4 text-xs text-gray-600">
+    Built with ❤️ by Yashodip using p5.js + TailwindCSS
+  </footer>
+
+
+  <script>
+    let values = [];
+    let w = 10;
+    let current = -1;
+    let isSorting = false;
+    let delayTime = 50;
+    let selectedAlgo = 'Bubble Sort';
+
+    function setup() {
+      const canvas = createCanvas(windowWidth * 0.95, 400);
+      canvas.parent('sketch-holder');
+      generateArray();
+      noLoop();
+    }
+
+    function draw() {
+      background(20);
+      for (let i = 0; i < values.length; i++) {
+        stroke(40);
+        if (i === current || i === current + 1) {
+          fill('#ff5555');
+        } else {
+          fill('#00ffcc');
+        }
+        rect(i * w, height - values[i], w, values[i], 4);
+      }
+    }
+
+    function generateArray() {
+      const totalBars = floor(width / w);
+      values = new Array(totalBars).fill().map(() => random(50, height));
+      current = -1;
+      redraw();
+    }
+
+    async function runSort() {
+      if (selectedAlgo === 'Bubble Sort') await bubbleSort();
+      else if (selectedAlgo === 'Selection Sort') await selectionSort();
+      else if (selectedAlgo === 'Insertion Sort') await insertionSort();
+      isSorting = false;
+      current = -1;
+      redraw();
+    }
+
+    async function bubbleSort() {
+      for (let i = 0; i < values.length; i++) {
+        for (let j = 0; j < values.length - i - 1; j++) {
+          current = j;
+          await sleep(delayTime);
+          if (values[j] > values[j + 1]) {
+            swap(j, j + 1);
+          }
+          redraw();
+        }
+      }
+    }
+
+    async function selectionSort() {
+      for (let i = 0; i < values.length; i++) {
+        let minIdx = i;
+        for (let j = i + 1; j < values.length; j++) {
+          current = j;
+          await sleep(delayTime);
+          if (values[j] < values[minIdx]) minIdx = j;
+          redraw();
+        }
+        if (minIdx !== i) swap(i, minIdx);
+        redraw();
+      }
+    }
+
+    async function insertionSort() {
+      for (let i = 1; i < values.length; i++) {
+        let key = values[i];
+        let j = i - 1;
+        while (j >= 0 && values[j] > key) {
+          current = j;
+          values[j + 1] = values[j];
+          j--;
+          await sleep(delayTime);
+          redraw();
+        }
+        values[j + 1] = key;
+        redraw();
+      }
+    }
+
+    function swap(i, j) {
+      let temp = values[i];
+      values[i] = values[j];
+      values[j] = temp;
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth * 0.95, 400);
+      generateArray();
+    }
+
+    // Button Setup
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('algoSelect').addEventListener('change', e => {
+        selectedAlgo = e.target.value;
+      });
+
+      document.getElementById('speedSlider').addEventListener('input', e => {
+        delayTime = parseInt(e.target.value);
+      });
+
+      document.getElementById('startBtn').addEventListener('click', () => {
+        if (!isSorting) {
+          isSorting = true;
+          runSort();
+        }
+      });
+
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        isSorting = false;
+        generateArray();
+      });
+    });
+  </script>
+</body>
+</html>
+
+</body>
+</html>
