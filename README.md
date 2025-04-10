@@ -15,7 +15,7 @@ This project is not just a technical demo  it is a **reflection of deep creative
 
 ## 📸 Demo Preview
 
-Coming soon... *(or you can open the HTML file directly in browser)*
+[Coming soon... *(or you can open the HTML file directly in browser)*](https://p5js-algoscope.netlify.app/)
 
 ---
 
